@@ -10,11 +10,11 @@
         image: ownyourbits/nextcloudpi
         pull: yes
         volumes:
-          - '{{storage_location}}:/data'
+          - '/storage/cloud_data:/data'
         env:
-          VIRTUAL_HOST: 'cloud.home'
-          LETSENCRYPT_HOST: 'cloud.home'
-          LETSENCRYPT_EMAIL: 'psa9710@gmail.com'
+          VIRTUAL_HOST: '{{cloud_url}}'
+          # LETSENCRYPT_HOST: '{{cloud_url}}'
+          # LETSENCRYPT_EMAIL: 'e@e.e'
         networks:
           - name: nginx-proxy
       tags: "container"        

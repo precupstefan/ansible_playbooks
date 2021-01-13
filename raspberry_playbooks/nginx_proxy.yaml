@@ -10,12 +10,12 @@
         name: nginx-proxy
       tags: "container"
 
-    - name: Run jwilder/nginx-proxy
+    - name: Run budry/jwilder-nginx-proxy-arm
       become: yes
       docker_container:
         restart: yes
         restart_policy: always
-        image: jwilder/nginx-proxy
+        image: budry/jwilder-nginx-proxy-arm
         state: started
         name: proxy
         networks:
