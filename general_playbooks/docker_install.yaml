@@ -5,6 +5,6 @@
   vars:
     docker_install_compose: true
     docker_users:
-      - "{{ user_var}}"
+      - "{{user_var}}"
   roles:
     - geerlingguy.docker_arm

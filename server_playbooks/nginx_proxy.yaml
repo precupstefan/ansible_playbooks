@@ -1,0 +1,55 @@
+- name: "Nginx proxy with let's encrypt playbook"
+  hosts: localhost
+  connection: local
+  become: yes
+  tasks:
+
+    - name: Add a docker network for the proxy
+      become: yes
+      docker_network:
+        name: nginx-proxy
+      tags: "container"
+
+    - name: Run jwilder/nginx-proxy
+      become: yes
+      docker_container:
+        restart: yes
+        restart_policy: always
+        image: jwilder/nginx-proxy
+        state: started
+        name: proxy
+        networks:
+          - name: nginx-proxy
+        volumes:
+          - /etc/nginx/certs
+          - /etc/nginx/vhost.d
+          - /usr/share/nginx/html
+          - /var/run/docker.sock:/tmp/docker.sock:ro
+        ports:
+          - '80:80'
+          - '443:443'
+      tags: "container"
+
+    - name: Run jrcs/letsencrypt-nginx-proxy-companion
+      become: yes
+      docker_container:
+        restart: yes
+        restart_policy: always
+        image: jrcs/letsencrypt-nginx-proxy-companion
+        state: started
+        name: letsencrypt-nginx-proxy-companion
+        networks:
+          - name: nginx-proxy
+        volumes_from:
+          - proxy
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+      tags: "container"
+# - name: "Nginx proxy playbook"
+#   hosts: localhost
+#   connection: local
+#   become: yes
+#   vars:
+#     docker_use_letsencrypt_companion: no
+#   roles:
+#     - name: prophets.docker-nginx-proxy

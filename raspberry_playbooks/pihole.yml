@@ -1,0 +1,7 @@
+- name: "PiHole install playbook"
+  hosts: localhost
+  connection: local
+  become: yes
+  
+  roles:
+    - docker-container-pihole
